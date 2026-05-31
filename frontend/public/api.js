@@ -15,7 +15,7 @@
    ============================================================ */
 const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:3001/api'
-  : 'https://punya-all-7xf2.vercel.app//api';
+  : 'punya-all-production.up.railway.app/api';
 
 /* ============================================================
    HELPER FETCH
