@@ -378,11 +378,16 @@ app.post('/api/transaksi', asyncHandler(async (req, res) => {
 }));
 
 // DELETE /api/transaksi/:id
-app.delete('/api/transaksi/:id', asyncHandler(async (req, res) => {
-  const r = await db.query('DELETE FROM transaksi WHERE id=$1 RETURNING id', [req.params.id]);
-  if (!r.rows.length) return res.status(404).json({ error: 'Transaksi tidak ditemukan' });
+app.delete('/api/products/:id', async (req, res) => {
+  const id = req.params.id;
+
+  await supabase
+    .from('products')
+    .delete()
+    .eq('id', id);
+
   res.json({ success: true });
-}));
+});
 
 // ============================================================
 // ── USERS ROUTES ──
