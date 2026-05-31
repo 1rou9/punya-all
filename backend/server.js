@@ -377,27 +377,6 @@ app.post('/api/transaksi', asyncHandler(async (req, res) => {
   }
 }));
 
-// DELETE /api/transaksi/:id
-app.delete('/api/products/:id', async (req, res) => {
-  const id = req.params.id;
-
-  console.log('Menghapus produk:', id);
-
-  const { data, error } = await supabase
-    .from('products')
-    .delete()
-    .eq('id', id);
-
-  console.log('Data:', data);
-  console.log('Error:', error);
-
-  if (error) {
-    return res.status(500).json(error);
-  }
-
-  res.json({ success: true });
-});
-
 // ============================================================
 // ── USERS ROUTES ──
 // ============================================================
@@ -442,23 +421,28 @@ app.put('/api/users/:id', asyncHandler(async (req, res) => {
 }));
 
 app.delete('/api/produk/:id', asyncHandler(async (req, res) => {
-  console.log('Menghapus produk ID:', req.params.id);
+  console.log('DELETE PRODUK DIPANGGIL:', req.params.id);
 
   const r = await db.query(
     'DELETE FROM produk WHERE id=$1 RETURNING id',
     [req.params.id]
   );
 
-  console.log('Rows terhapus:', r.rows);
+  console.log('HASIL DELETE:', r.rows);
 
   if (!r.rows.length) {
-    console.log('Produk tidak ditemukan');
-    return res.status(404).json({ error: 'Produk tidak ditemukan' });
+    console.log('PRODUK TIDAK DITEMUKAN');
+    return res.status(404).json({
+      error: 'Produk tidak ditemukan'
+    });
   }
 
-  console.log('Produk berhasil dihapus');
+  console.log('PRODUK BERHASIL DIHAPUS');
 
-  res.json({ success: true });
+  res.json({
+    success: true,
+    deleted: r.rows[0]
+  });
 }));
 
 // ============================================================
