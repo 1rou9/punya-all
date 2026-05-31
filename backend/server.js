@@ -381,10 +381,19 @@ app.post('/api/transaksi', asyncHandler(async (req, res) => {
 app.delete('/api/products/:id', async (req, res) => {
   const id = req.params.id;
 
-  await supabase
+  console.log('Menghapus produk:', id);
+
+  const { data, error } = await supabase
     .from('products')
     .delete()
     .eq('id', id);
+
+  console.log('Data:', data);
+  console.log('Error:', error);
+
+  if (error) {
+    return res.status(500).json(error);
+  }
 
   res.json({ success: true });
 });
