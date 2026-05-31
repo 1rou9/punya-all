@@ -441,13 +441,23 @@ app.put('/api/users/:id', asyncHandler(async (req, res) => {
   res.json(u);
 }));
 
-app.delete('/api/users/:id', asyncHandler(async (req, res) => {
-  const u = await db.one('SELECT username FROM users WHERE id=$1', [req.params.id]);
-  if (!u) return res.status(404).json({ error: 'User tidak ditemukan' });
-  if (u.username === 'admin')
-    return res.status(403).json({ error: 'Akun admin utama tidak bisa dihapus' });
+app.delete('/api/produk/:id', asyncHandler(async (req, res) => {
+  console.log('Menghapus produk ID:', req.params.id);
 
-  await db.query('DELETE FROM users WHERE id=$1', [req.params.id]);
+  const r = await db.query(
+    'DELETE FROM produk WHERE id=$1 RETURNING id',
+    [req.params.id]
+  );
+
+  console.log('Rows terhapus:', r.rows);
+
+  if (!r.rows.length) {
+    console.log('Produk tidak ditemukan');
+    return res.status(404).json({ error: 'Produk tidak ditemukan' });
+  }
+
+  console.log('Produk berhasil dihapus');
+
   res.json({ success: true });
 }));
 
